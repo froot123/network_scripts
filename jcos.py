@@ -95,7 +95,149 @@ set class-of-service interfaces {{INTF}} classifiers inet-precedence vpn-ipp-in
 """
 
 ID100="""
-
+{% if EXTENDED %}
+{# STATIC PART #}
+{# group #}
+set groups filter-RT-BC-BE-in firewall family inet filter <*> accounting-profile fba-vpn-profile
+set groups filter-RT-BC-BE-in firewall family inet filter <*> interface-specific
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term RT then count 56
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term RT then loss-priority high
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term RT then forwarding-class realtime
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term RT then accept
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BC then count 57
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BC then loss-priority high
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BC then forwarding-class critical-data
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BC then accept
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BE then count 55
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BE then loss-priority low
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BE then forwarding-class low-cost-data
+set groups filter-RT-BC-BE-in firewall family inet filter <*> term BE then accept
+{# fba-vpn-profile #}
+set accounting-options filter-profile fba-vpn-profile file stat-fba
+set accounting-options filter-profile fba-vpn-profile interval 5
+set accounting-options filter-profile fba-vpn-profile counters 56
+set accounting-options filter-profile fba-vpn-profile counters 57
+set accounting-options filter-profile fba-vpn-profile counters 55
+{# classifiers #}
+set class-of-service classifiers dscp vpn-qos-in forwarding-class realtime loss-priority high code-points cs4
+set class-of-service classifiers dscp vpn-qos-in forwarding-class critical-data loss-priority high code-points af21
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 000111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 001111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 010111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 011111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 100111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 101111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 110111
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111000
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111001
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111010
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111011
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111100
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111101
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111110
+set class-of-service classifiers dscp vpn-qos-in forwarding-class low-cost-data loss-priority low code-points 111111
+{# RED #}
+set class-of-service drop-profiles 50-95-drop interpolate fill-level 0
+set class-of-service drop-profiles 50-95-drop interpolate fill-level 50
+set class-of-service drop-profiles 50-95-drop interpolate fill-level 95
+set class-of-service drop-profiles 50-95-drop interpolate drop-probability 0
+set class-of-service drop-profiles 50-95-drop interpolate drop-probability 10
+set class-of-service drop-profiles 50-95-drop interpolate drop-probability 100
+{% endif %}
+{# DYNAMIC PART #}
+{# Defining input firewall family inet filter #}
+set firewall family inet filter profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in apply-groups filter-RT-BC-BE-in
+set firewall family inet filter profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in term RT from dscp cs4
+set firewall family inet filter profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in term RT then policer lim{{RT_RATE}}-RT
+set firewall family inet filter profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in term BC from dscp af21
+set firewall family inet filter profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in term BC then policer lim{{BC_RATE}}-BC-remap-to-be
+{# Defining input policer #}
+set firewall policer lim{{BW_RATE}}-drop if-exceeding bandwidth-limit {{BW_RATE}}
+set firewall policer lim{{BW_RATE}}-drop if-exceeding burst-size-limit {{BW_BSL}}
+set firewall policer lim{{BW_RATE}}-drop then discard
+{# Defining FF policer for RT traffic #}
+set firewall policer lim{{RT_RATE}}-RT if-exceeding bandwidth-limit {{RT_RATE}}
+set firewall policer lim{{RT_RATE}}-RT if-exceeding burst-size-limit {{RT_BSL}}
+set firewall policer lim{{RT_RATE}}-RT then discard
+{# Defining FF policer for BC traffic #}
+set firewall policer lim{{BC_RATE}}-BC-remap-to-be if-exceeding bandwidth-limit {{BC_RATE}}
+set firewall policer lim{{BC_RATE}}-BC-remap-to-be if-exceeding burst-size-limit {{BC_BSL}}
+set firewall policer lim{{BC_RATE}}-BC-remap-to-be then loss-priority low
+set firewall policer lim{{BC_RATE}}-BC-remap-to-be then forwarding-class low-cost-data
+{# Applying scheduler-map and and shaping rate  #}
+set class-of-service traffic-control-profiles profile-{{BW_RATE}}-{{PROFILE_NAME}} scheduler-map profile-{{PROFILE_NAME}}
+set class-of-service traffic-control-profiles profile-{{BW_RATE}}-{{PROFILE_NAME}} shaping-rate {{BW_RATE}}
+{# Defining scheduler-map #}
+set class-of-service scheduler-maps profile-{{PROFILE_NAME}} forwarding-class realtime scheduler {{RT}}p-prio
+set class-of-service scheduler-maps profile-{{PROFILE_NAME}} forwarding-class critical-data scheduler {{BC}}p-drop
+set class-of-service scheduler-maps profile-{{PROFILE_NAME}} forwarding-class low-cost-data scheduler remainder-drop
+{# Defining scheduler for RT traffic #}
+set class-of-service schedulers {{RT}}p-prio transmit-rate percent {{RT}}
+set class-of-service schedulers {{RT}}p-prio buffer-size temporal 50k
+set class-of-service schedulers {{RT}}p-prio priority high
+{# Defining scheduler for BC traffic #}
+set class-of-service schedulers {{BC}}p-drop transmit-rate percent {{BC}}
+set class-of-service schedulers {{BC}}p-drop buffer-size percent {{BC}}
+set class-of-service schedulers {{BC}}p-drop drop-profile-map loss-priority high protocol any drop-profile 50-95-drop
+{# scheduler - remainder #}
+set class-of-service schedulers remainder-drop transmit-rate remainder
+set class-of-service schedulers remainder-drop buffer-size remainder
+set class-of-service schedulers remainder-drop priority low
+set class-of-service schedulers remainder-drop drop-profile-map loss-priority any protocol any drop-profile 50-95-drop
+{% if INTF %}
+{# INTERFACE PART #}
+set interfaces {{INTF}} family inet filter input profile-id100-{{BW_RATE}}-{{PROFILE_NAME}}-in
+set interfaces {{INTF}} family inet policer input lim{{BW_RATE}}-drop
+set class-of-service interfaces {{INTF}} output-traffic-control-profile profile-{{BW_RATE}}-{{PROFILE_NAME}}
+set class-of-service interfaces {{INTF}} classifiers dscp vpn-qos-in
+{% endif %}
 """
 
 
@@ -171,7 +313,7 @@ if __name__ == '__main__':
         help='output to file (.txt) - will be created automatically (default output to console)')
     parser.add_argument(
         '-t', type=str, required=False, default='id300', dest='template', action='store',
-        help='H-QoS template id (default: \'id300\'; only \'id300\' is currently supported)') 
+        help='H-QoS template id (default: \'id300\')') 
     parser.add_argument(
         '-i', type=str, required=False, dest='interface', action='store',
         help='applying config to specified interface; Junipers\'s format required, for ex. \'xe-4/0/0.1234\'' )
@@ -217,9 +359,7 @@ if __name__ == '__main__':
     if args.template == 'id300':
         result_string = Template(ID300).render(params)
     elif args.template == 'id100':
-        # Pochta
-        print('Not ready yet')
-        quit()
+        result_string = Template(ID100).render(params)
     else:
         print('Unknown profile id. Visit box.msk.ip.rostelecom.ru/cfgdb for more information.')
         quit()
